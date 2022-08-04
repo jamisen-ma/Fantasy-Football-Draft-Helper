@@ -131,7 +131,7 @@ readTextFile("stat_files/simplified_fantasy_data.json", function(text1){
 document.getElementById('draftboard button').onclick=function(){
     final_sorted_array.unshift("PLACEHOLDER")
     sessionStorage.setItem("full rankings based on position", JSON.stringify(final_sorted_array))
-    window.location.href = 'draftboard.html'
+    window.location.href = 'index.html'
     }
  
 
