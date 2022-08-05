@@ -54,6 +54,7 @@ columns.forEach((column) => {
             }
 
             final_sorted_array = sorted_name_array
+            console.log(final_sorted_array)
 
           }
     });
@@ -65,7 +66,6 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
     newPlayer.style.backgroundColor = position_color_dict[position]
     newPlayer.setAttribute("class", 'player_card')
     newPlayer.setAttribute("id", name)
-    console.log(photo_link)
     newPlayer.style.backgroundImage = 'url(' + photo_link +')'
     newPlayer.style.backgroundSize = "40% auto"
     newPlayer.style.backgroundRepeat = "no-repeat"
@@ -108,15 +108,15 @@ function readTextFile(file, callback) {
 var rankings_text = sessionStorage.getItem("full_rankings")
 var rankings_list = JSON.parse(rankings_text)
 
-
+final_sorted_array = rankings_list
 
 readTextFile("stat_files/simplified_fantasy_data.json", function(text1){
     var profile_data = JSON.parse(text1)
     readTextFile("stat_files/photo_list.json", function(text2){
     var photo_dict = JSON.parse(text2)
-    for (let i = 0; i < 149; i++) {
+    for (let i = 0; i < rankings_list.length; i++) {
         var player_name = rankings_list[i]
-
+        console.log(player_name)
         var profile_dict = profile_data[player_name]
         var name = profile_dict['Name']
         add_player(profile_dict['Pos'], name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[name],i)
@@ -128,7 +128,7 @@ readTextFile("stat_files/simplified_fantasy_data.json", function(text1){
 
 
 
-document.getElementById('draftboard button').onclick=function(){
+document.getElementById("draftboard_button").onclick=function(){
     final_sorted_array.unshift("PLACEHOLDER")
     sessionStorage.setItem("full rankings based on position", JSON.stringify(final_sorted_array))
     window.location.href = 'index.html'

@@ -88,15 +88,15 @@ body {
     height: 100%;
 }
 
-.nav-pills{
-    /* justify-content: center; */
-    /* margin-right: 30%; */
+#draftboard_button{
+    margin-left: 20%;
 }
 
 
+
 .btn-outline-primary{
-    /* justify-content: left; */
-    margin-right: 35%;
+    float: left;
+    margin-right: 0.5em;
 }
 
 .column_header {
@@ -104,9 +104,15 @@ body {
     top: 0;
     width: 100%;
     padding: 1em;
+    margin-bottom: 0.2em;
     align-items: center;
     background-color: #ddd;
     text-align: center;
+    font-family: helvetica;
+    font-size: 1.2em;
   }
   
 
+.column h1{
+font-family: helvetica;
+}
