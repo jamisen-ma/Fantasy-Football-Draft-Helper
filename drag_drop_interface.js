@@ -87,12 +87,13 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
   }
 
 
-function add_team(){
+function add_team(team_name){
     var new_column = document.createElement("div")
     new_column.className = "column"
     var new_column_header = document.createElement("div")
     new_column_header.className = "column_header"
     new_column_header.contentEditable = true
+    new_column_header.innerText = team_name
     new_column.appendChild(new_column_header)
     console.log(new_column)
     draftboard_container.appendChild(new_column)
@@ -151,9 +152,10 @@ readTextFile("stat_files/rankings_list.json", function(text){
         
             if (team_rosters != null){
                 for (let i = 1; i <Object.keys(team_rosters).length+1; i++) {
-                    add_team(i)
+                    
                     var column = draftboard_container.children[i]
                     var roster = team_rosters[i]
+                    add_team(roster['team_name'])
                     console.log(column)
                     for (let j = 0; j <Object.keys(roster).length; j++) {
                         var player_name = roster[j]
@@ -184,7 +186,8 @@ function save_team_rosters(){
         var one_div_roster = all_div_roster[i].children
         team_roster_dict[i] = new Array()
         console.log(team_roster_dict[i])
-        
+        var team_name = one_div_roster[0].textContent
+        team_roster_dict["team_name"] = team_name
         for (let j = 1; j < one_div_roster.length; j++) {
             var player = one_div_roster[j]
             console.log(team_roster_dict[i])
@@ -221,7 +224,7 @@ document.getElementById("reset_button").onclick=function(){
     }
 
 document.getElementById("add_team_button").onclick=function(){
-    add_team()
+    add_team("")
 
 }
 
