@@ -124,9 +124,6 @@ function readTextFile(file, callback) {
     rawFile.send(null);
 }
 
-//usage:
-
-
 readTextFile("stat_files/rankings_list.json", function(text){
     var rankings_list = JSON.parse(text);
     var rankings_text = sessionStorage.getItem("full rankings based on position")
