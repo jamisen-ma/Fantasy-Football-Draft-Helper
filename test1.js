@@ -1,43 +1,46 @@
-const columns = document.querySelectorAll(".column");
+
 const column_container = document.getElementById('player_storage_column')
 const draftboard_container = document.getElementById('draftboard_containers')
 export const sortOrder = []
-columns.forEach((column) => {
-    console.log(column.id)})
+var team_roster_dict = {}
 
-columns.forEach((column) => {
-    new Sortable(column, {
-        forceFallback: true,
-        group: "shared",
-        draggable: ".player_card",
-        animation: 150,
-        ghostClass: "blue-background-class",
-        mirror: {
-            constrainDimensions: true,
-        },
-        filter: 'h1',
-   
-        onEnd: (evt) => {
-            // let newIndex;
-
-            let neighborIndex;
-            sortOrder.splice(sortOrder.indexOf(evt.item.id), 1);
-            console.log("bruh")
-            console.log(evt.item.id)
-            if (evt.item.previousElementSibling != null && evt.item.nextElementSibling != null){
-                if (evt.oldIndex < evt.newIndex) 
-                    neighborIndex = sortOrder.indexOf(evt.item.previousElementSibling.id) + 1;
-                else neighborIndex = sortOrder.indexOf(evt.item.nextElementSibling.id);
-                    sortOrder.splice(neighborIndex, 0, evt.item.id); 
-            
-            }
-            console.log(sortOrder)
-
-
-          }
+function initialize_sortable_columns(){
+    const columns = document.querySelectorAll(".column");
+    columns.forEach((column) => {
+        new Sortable(column, {
+            forceFallback: true,
+            group: "shared",
+            draggable: ".player_card",
+            animation: 150,
+            ghostClass: "blue-background-class",
+            mirror: {
+                constrainDimensions: true,
+            },
+            filter: 'h1',
+       
+            onEnd: (evt) => {
+                // let newIndex;
+    
+                let neighborIndex;
+                sortOrder.splice(sortOrder.indexOf(evt.item.id), 1);
+                console.log("bruh")
+                console.log(evt.item.id)
+                if (evt.item.previousElementSibling != null && evt.item.nextElementSibling != null){
+                    if (evt.oldIndex < evt.newIndex) 
+                        neighborIndex = sortOrder.indexOf(evt.item.previousElementSibling.id) + 1;
+                    else neighborIndex = sortOrder.indexOf(evt.item.nextElementSibling.id);
+                        sortOrder.splice(neighborIndex, 0, evt.item.id); 
+                
+                }
+                console.log(sortOrder)
+    
+    
+              }
+        });
     });
-});
+}
 
+initialize_sortable_columns()
 
 var draftboard_bool = true
 if (document.getElementById('Page Title') == "Position Rankings"){
@@ -82,7 +85,7 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
     }
     else{
         position_ranking_columns[position].appendChild(newPlayer)
-    }  
+    }
   }
 
 
@@ -95,10 +98,19 @@ function add_team(){
     new_column.appendChild(new_column_header)
     console.log(new_column)
     draftboard_container.appendChild(new_column)
+    initialize_sortable_columns()
     console.log("Team Added")
+    team_roster_dict[length(team_roster_dict)] = []
 }
 
 
+function remove_team(){
+    console.log(draftboard_container.children.length)
+    var number_of_teams = draftboard_container.children.length
+    if (number_of_teams > 1){
+    draftboard_container.removeChild(draftboard_container.children[number_of_teams-1])
+    delete team_roster_dict[length(team_roster_dict)-1]
+}}
 
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
@@ -119,28 +131,55 @@ readTextFile("stat_files/rankings_list.json", function(text){
     var rankings_list = JSON.parse(text);
     var rankings_text = sessionStorage.getItem("full rankings based on position")
     var positions_rankings_list = JSON.parse(rankings_text)
-    console.log(positions_rankings_list)
+   
     if (positions_rankings_list != null){
         rankings_list = positions_rankings_list
     }
-
+    console.log(rankings_list)
     readTextFile("stat_files/simplified_fantasy_data.json", function(text1){
         var profile_data = JSON.parse(text1)
         readTextFile("stat_files/photo_list.json", function(text2){
         var photo_dict = JSON.parse(text2)
-        for (let i = 1; i < 150; i++) {
+        for (let i = 1; i < rankings_list.length; i++) {
             var player_name = rankings_list[i]
             console.log(player_name)
             var profile_dict = profile_data[player_name]
             add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name])
             }})
+        console.log(sessionStorage.getItem('team_rosters'))
+        
+        // var team_rosters = sessionStorage.getItem("team_rosters")
+        // if team_rosters != null{
+        //     for (let j = 1; i < ; i++) {
+
+        //     }
+        // }
+
+    
     });
     
 });
-console.log(sortOrder.at(0))
+
+function save_team_rosters(){
+    var team_roster_dict = {}
+    all_div_roster = draftboard_container.children
+    for (let i = 1; i < team_rosters.length-1; i++) {
+        one_div_roster = all_div_roster[i]
+        team_roster_dict[i] = []
+        for (let j = 1; j < roster.length; i++) {
+            player = one_div_roster[j]
+            team_roster_dict[i].push(player.id)
+        }
+    sessionStorage.setItem("team_rosters", team_roster_dict)
+
+}
+}
+
+
 
 document.getElementById('player_rankings_button').onclick=function(){
 sessionStorage.setItem("full_rankings", JSON.stringify(sortOrder))
+save_team_rosters()
 window.location.href = 'position_rankings.html'
 }
 
@@ -149,10 +188,18 @@ document.getElementById("reset_button").onclick=function(){
     console.log(sessionStorage.getItem("full rankings based on position"))
     sessionStorage.removeItem("full rankings based on position")
     var hello = sessionStorage.getItem("full rankings based on position")
-
     console.log(hello)
     window.location.reload();
     }
+
+document.getElementById("add_team_button").onclick=function(){
+    add_team()
+}
+
+document.getElementById("delete_team_button").onclick=function(){
+    console.log("team removed")
+    remove_team()
+}
 
 
 

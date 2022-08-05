@@ -1,9 +1,6 @@
-
 const column_container = document.getElementById('player_storage_column')
 const draftboard_container = document.getElementById('draftboard_containers')
 export const sortOrder = []
-var team_roster_dict = {}
-
 
 function initialize_sortable_columns(){
     const columns = document.querySelectorAll(".column");
@@ -53,7 +50,7 @@ if (document.getElementById('Page Title') == "Position Rankings"){
 var position_color_dict = {"QB":"purple", "RB": "lightblue","WR":"red", "TE": "blue"}
 var position_ranking_dict=  {"QB":[], "RB": [],"WR":[], "TE": []}
 
-function add_player (position, name, last_years_fantasy_points, projected_fantasy_points, team, photo_link) {
+function add_player (position, name, last_years_fantasy_points, projected_fantasy_points, team, photo_link, div_location) {
     const newPlayer = document.createElement('div')
     newPlayer.style.backgroundColor = position_color_dict[position]
     newPlayer.setAttribute("class", 'player_card')
@@ -80,13 +77,13 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
     // add the text node to the newly created div
     newPlayer.style.backgroundColor = position_color_dict[position]
     if (draftboard_bool == true) {
-        column_container.appendChild(newPlayer)
+        div_location.appendChild(newPlayer)
         sortOrder.push(name)
         position_ranking_dict[position].push(name)
     }
     else{
         position_ranking_columns[position].appendChild(newPlayer)
-    }  
+    }
   }
 
 
@@ -109,7 +106,11 @@ function remove_team(){
     var number_of_teams = draftboard_container.children.length
     if (number_of_teams > 1){
     draftboard_container.removeChild(draftboard_container.children[number_of_teams-1])
-}}
+}
+else{
+    return "no teams to remove"
+}
+}
 
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
@@ -130,7 +131,7 @@ readTextFile("stat_files/rankings_list.json", function(text){
     var rankings_list = JSON.parse(text);
     var rankings_text = sessionStorage.getItem("full rankings based on position")
     var positions_rankings_list = JSON.parse(rankings_text)
-    console.log(positions_rankings_list)
+   
     if (positions_rankings_list != null){
         rankings_list = positions_rankings_list
     }
@@ -139,34 +140,92 @@ readTextFile("stat_files/rankings_list.json", function(text){
         var profile_data = JSON.parse(text1)
         readTextFile("stat_files/photo_list.json", function(text2){
         var photo_dict = JSON.parse(text2)
-        for (let i = 1; i < 150; i++) {
+        for (let i = 1; i < Object.keys(rankings_list).length; i++) {
             var player_name = rankings_list[i]
             console.log(player_name)
             var profile_dict = profile_data[player_name]
-            add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name])
-            }})
+            add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name], column_container)
+
+            }
+            console.log(sessionStorage.getItem('team_rosters'))
+        
+            var team_rosters = JSON.parse(sessionStorage.getItem("team_rosters"))
+            console.log(team_rosters.length)
+        
+            if (team_rosters != null){
+                for (let i = 1; i <Object.keys(team_rosters).length+1; i++) {
+                    add_team(i)
+                    var column = draftboard_container.children[i]
+                    var roster = team_rosters[i]
+                    console.log(column)
+                    for (let j = 0; j <Object.keys(roster).length; j++) {
+                        var player_name = roster[j]
+                        var profile_dict = profile_data[player_name]
+                        console.log(player_name)
+                        console.log(profile_dict)
+                        add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name], column)
+
+    
+                }
+            }
+            }
+        }
+        
+        )
+
+
+    
     });
     
 });
-console.log(sortOrder.at(0))
+
+var team_roster_dict = {}
+function save_team_rosters(){
+    var all_div_roster = draftboard_container.children
+    for (let i = 1; i < all_div_roster.length; i++) {
+    
+        var one_div_roster = all_div_roster[i].children
+        team_roster_dict[i] = new Array()
+        console.log(team_roster_dict[i])
+        
+        for (let j = 1; j < one_div_roster.length; j++) {
+            var player = one_div_roster[j]
+            console.log(team_roster_dict[i])
+            console.log(player.id)
+
+            team_roster_dict[i].push(player.id)
+        }
+    }
+
+    sessionStorage.setItem("team_rosters",  JSON.stringify(team_roster_dict))
+
+}
+
+
 
 document.getElementById('player_rankings_button').onclick=function(){
 sessionStorage.setItem("full_rankings", JSON.stringify(sortOrder))
+save_team_rosters()
 window.location.href = 'position_rankings.html'
 }
 
 
 document.getElementById("reset_button").onclick=function(){
-    console.log(sessionStorage.getItem("full rankings based on position"))
     sessionStorage.removeItem("full rankings based on position")
-    var hello = sessionStorage.getItem("full rankings based on position")
-
-    console.log(hello)
+    sessionStorage.removeItem("team_rosters")
+    while (true){
+        var response = remove_team()
+        console.log(response)
+        if (response == "no teams to remove"){
+            break
+        }
+    }
     window.location.reload();
     }
 
 document.getElementById("add_team_button").onclick=function(){
     add_team()
+
 }
 
 document.getElementById("delete_team_button").onclick=function(){

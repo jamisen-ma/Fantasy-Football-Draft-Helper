@@ -134,7 +134,7 @@ document.getElementById("draftboard_button").onclick=function(){
     window.location.href = 'index.html'
     }
  
-
+console.log(sessionStorage.getItem('team_rosters'))
 
 
 
