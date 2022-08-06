@@ -19,11 +19,11 @@ body {
 }
 
 .column {
-    flex-basis: 15%;
-    background: #ddd;
+    flex-basis: 17%;
+    background: #99DDFF;
     min-height: 90vh;
     max-height: 90vh;
-    min-width: 25vh;
+    min-width: 30vh;
     padding-left: 0.5%;
     border-radius: 10px;
     overflow-y: auto;
@@ -58,8 +58,11 @@ body {
     cursor: pointer;
     color: white;
     font-size: 1.5vmin;
-    box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     text-align: right;
+    font-family: var(--bs-font-sans-serif);
+    /* border-width: 2px;
+    border-color: rgb(238, 106, 40);
+    border-style: solid; */
 }
 
 
@@ -108,9 +111,10 @@ body {
     align-items: center;
     background-color: #ddd;
     text-align: center;
-    font-family: helvetica;
+    font-family: var(--bs-font-sans-serif);
     font-size: 1.1em;
     font-weight: bold;
+    background-color: #99DDFF;
   }
   
 

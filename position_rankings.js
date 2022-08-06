@@ -4,7 +4,8 @@ const RB_container = document.getElementById('RB')//add each position column
 const WR_container = document.getElementById('WR')//add each position column
 const TE_container = document.getElementById('TE')//add each position column
 const columns = document.querySelectorAll(".column");
-var position_color_dict = {"QB":"purple", "RB": "green","WR":"red", "TE": "blue"}
+// var position_color_dict = {"QB":"#01345B", "RB": "#00ABE1","WR":"dodgerblue", "TE": "blue"}
+var position_color_dict = {"QB":"#00ABE1", "RB": "dodgerblue","WR":"blue", "TE": "#01345B"}
 var position_ranking_dict=  {"QB":[], "RB": [],"WR":[], "TE": []}
 var position_numerical_ranking_dict=  {"QB":[], "RB": [],"WR":[], "TE": []}
 var position_column_dict=  {"QB":QB_container, "RB": RB_container,"WR":WR_container, "TE": TE_container}
@@ -70,12 +71,18 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
     newPlayer.style.backgroundSize = "40% auto"
     newPlayer.style.backgroundRepeat = "no-repeat"
     newPlayer.style.backgroundPosition = "-10% 5%"
-    var oNewP = document.createElement("pre");
-    var first_text_node = document.createTextNode(team +" "+position +" "+ name)
+    var x = document.createElement("B");
+    var full_name = name.split(" ");
+    var first_name = full_name[0][0];
+    var last_name = full_name[1];
+    var first_text_node = document.createTextNode(team +" "+position +" "+ first_name+". "+last_name);
+    var x = document.createElement("b");
+    x.appendChild(first_text_node);
+
     var second_text_node = document.createTextNode("2021: " + last_years_fantasy_points )
     var third_text_node = document.createTextNode("2022 Projected: " + projected_fantasy_points)
    
-    newPlayer.appendChild(first_text_node)
+    newPlayer.appendChild(x)
     newPlayer.appendChild(document.createElement("br"));
     newPlayer.appendChild(second_text_node)
     newPlayer.appendChild(document.createElement("br"));

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="myFunction()">create a B element with text</button>
+
+<script>
+function myFunction() {/*  w w  w.  ja v  a2s. co  m*/
+    var x = document.createElement("b");
+    var t = document.createTextNode("Some bold text");
+    x.appendChild(t);
+    document.body.appendChild(x);
+}
+</script>
+
+</body>
+</html>

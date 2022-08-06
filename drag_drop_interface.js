@@ -47,7 +47,7 @@ if (document.getElementById('Page Title') == "Position Rankings"){
     
 }
 
-var position_color_dict = {"QB":"purple", "RB": "lightblue","WR":"red", "TE": "blue"}
+var position_color_dict = {"QB":"#00ABE1", "RB": "dodgerblue","WR":"blue", "TE": "#01345B"}
 var position_ranking_dict=  {"QB":[], "RB": [],"WR":[], "TE": []}
 
 function add_player (position, name, last_years_fantasy_points, projected_fantasy_points, team, photo_link, div_location) {
@@ -59,22 +59,25 @@ function add_player (position, name, last_years_fantasy_points, projected_fantas
     newPlayer.style.backgroundSize = "40% auto"
     newPlayer.style.backgroundRepeat = "no-repeat"
     newPlayer.style.backgroundPosition = "-10% 5%"
-    var oNewP = document.createElement("pre");
-    var first_text_node = document.createTextNode(team +" "+position +" "+ name)
+    var x = document.createElement("B");
+    var full_name = name.split(" ");
+    var first_name = full_name[0][0];
+    var last_name = full_name[1];
+    var first_text_node = document.createTextNode(team +" "+position +" "+ first_name+". "+last_name);
+    var x = document.createElement("b");
+    x.appendChild(first_text_node);
+
     var second_text_node = document.createTextNode("2021: " + last_years_fantasy_points )
     var third_text_node = document.createTextNode("2022 Projected: " + projected_fantasy_points)
    
-    newPlayer.appendChild(first_text_node)
+    newPlayer.appendChild(x)
     newPlayer.appendChild(document.createElement("br"));
     newPlayer.appendChild(second_text_node)
     newPlayer.appendChild(document.createElement("br"));
     newPlayer.appendChild(third_text_node)
     newPlayer.setAttribute("class", 'player_card')
     newPlayer.setAttribute("id", name)
-    newPlayer.innerText=  team +" "+position + " "+ name  +
-    "\n 2021: " + last_years_fantasy_points + "\n "+
-    "2022 Projected: " + projected_fantasy_points
-    // add the text node to the newly created div
+
     newPlayer.style.backgroundColor = position_color_dict[position]
     if (draftboard_bool == true) {
         div_location.appendChild(newPlayer)
@@ -145,28 +148,34 @@ readTextFile("stat_files/rankings_list.json", function(text){
             add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name], column_container)
 
             }
-            console.log(sessionStorage.getItem('team_rosters'))
+        
         
             var team_rosters = JSON.parse(sessionStorage.getItem("team_rosters"))
-            console.log(team_rosters.length)
+     
         
             if (team_rosters != null){
                 for (let i = 1; i <Object.keys(team_rosters).length+1; i++) {
-                    
+                    var roster = team_rosters[i]
+                    add_team(roster[0])
                     var column = draftboard_container.children[i]
                     var roster = team_rosters[i]
-                    add_team(roster['team_name'])
                     console.log(column)
-                    for (let j = 0; j <Object.keys(roster).length; j++) {
+                    for (let j = 1; j <Object.keys(roster).length; j++) {
                         var player_name = roster[j]
                         var profile_dict = profile_data[player_name]
                         console.log(player_name)
                         console.log(profile_dict)
                         add_player(profile_dict['Pos'], player_name, profile_dict['2021 Points'], profile_dict['2022 Projected'], profile_dict['Team'],photo_dict[player_name], column)
-
     
                 }
+            
             }
+            }
+            else{
+                add_team("Click to Change Name")
+                add_team("Click to Change Name")
+                add_team("Click to Change Name")
+                
             }
         }
         
@@ -187,7 +196,7 @@ function save_team_rosters(){
         team_roster_dict[i] = new Array()
         console.log(team_roster_dict[i])
         var team_name = one_div_roster[0].textContent
-        team_roster_dict["team_name"] = team_name
+        team_roster_dict[i].push(team_name)
         for (let j = 1; j < one_div_roster.length; j++) {
             var player = one_div_roster[j]
             console.log(team_roster_dict[i])
@@ -224,7 +233,7 @@ document.getElementById("reset_button").onclick=function(){
     }
 
 document.getElementById("add_team_button").onclick=function(){
-    add_team("")
+    add_team("Click to Change Name");
 
 }
 
