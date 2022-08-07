@@ -6,7 +6,6 @@ Fantasy Football Draft Helper is a easy to use drag and drop tool to help you cu
 Check it out: https://jamisen-ma.github.io/fantasy_football_draft_ranking_board/index.html
 
 ![](https://github.com/jamisen-ma/fantasy_football_draft_ranking_board/blob/master/gif1.gif)
-
 ## Features
 
 - Responsive
