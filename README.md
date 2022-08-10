@@ -1,7 +1,7 @@
 
 # Fantasy Football Draft Helper
 
-Fantasy Football Draft Helper is an easy to use drag and drop tool to help you customize your draft rankings before and during your draft.
+Fantasy Football Draft Helper is an easy-to-use drag and drop tool to help you customize your draft rankings before and during your draft.
 
 Check it out: https://jamisen-ma.github.io/fantasy_football_draft_ranking_board/index.html
 
