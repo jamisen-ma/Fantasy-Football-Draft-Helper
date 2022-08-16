@@ -3,7 +3,7 @@
 
 Fantasy Football Draft Helper is an easy-to-use drag and drop tool to help you customize your draft rankings before and during your draft.
 
-Check it out: https://jamisen-ma.github.io/fantasy_football_draft_ranking_board/index.html
+Check it out: https://jamisen-ma.github.io/Fantasy-Football-Draft-Helper/
 
 ![](https://github.com/jamisen-ma/fantasy_football_draft_ranking_board/blob/master/gif1.gif)
 ## Features
